@@ -79,7 +79,7 @@ bool admin_login(std::string password, int no_of_attempts)
     return false;
 }
 
-void admin_menu()
+int admin_menu()
 {
     system("cls");
     CONSOLE_SCREEN_BUFFER_INFO csbi;   //windows.h object
@@ -101,6 +101,9 @@ void admin_menu()
     std::string remove = "2. Remove a question";
     std::cout<<std::setw((columns/2)+remove.length()/2)<<std::right<<std::setfill(' ');
     std::cout<<remove<<"\n";
+    std::string exit = "3. Exit admin mode";
+    std::cout<<std::setw((columns/2)+exit.length()/2)<<std::right<<std::setfill(' ');
+    std::cout<<exit<<"\n";
     std::cout<<std::setw(columns/2)<<std::right<<std::setfill(' ');
     std::cout<<" ";
     std::cin>>action_choice;
@@ -108,5 +111,10 @@ void admin_menu()
     {
         add_question();
     }
+    else if(action_choice==2)
+    {
+        remove_question();
+    }
+    return action_choice;
 }
 #endif

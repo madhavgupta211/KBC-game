@@ -13,6 +13,7 @@ int main()
     if(access_type==1)
     {
         bool admin_access_status = false;
+        int admin_menu_action = 1;
         for(int i=NO_OF_ATTEMPTS;i>0;i--)
         {
             admin_access_status = admin_login(PASSWORD,i);            //handles login window
@@ -28,7 +29,10 @@ int main()
         }
         cout<<"\nAccess granted.";
         getch();
-        admin_menu();
+        while(admin_menu_action != 3)
+        {
+           admin_menu_action = admin_menu();
+        }
     }
     return 0;
 }
