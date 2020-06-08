@@ -1,4 +1,5 @@
 #include <iostream> 
+#include <conio.h>
 #include "fundamentals.h"
 #define NO_OF_ATTEMPTS 5      //no. of attempts to login
 #define PASSWORD "cholosolo"  //change admin's password from here
@@ -8,13 +9,13 @@ using namespace std;
 int main()
 {
     int access_type;
-    access_type = display_intro();
+    access_type = display_intro();                                   //displays start screen
     if(access_type==1)
     {
         bool admin_access_status = false;
         for(int i=NO_OF_ATTEMPTS;i>0;i--)
         {
-            admin_access_status = admin_login(PASSWORD,i);
+            admin_access_status = admin_login(PASSWORD,i);            //handles login window
             if(admin_access_status)
             {
                 break;
@@ -26,6 +27,8 @@ int main()
             exit(1);
         }
         cout<<"\nAccess granted.";
+        getch();
+        admin_menu();
     }
     return 0;
 }

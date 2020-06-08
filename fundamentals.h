@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <stdlib.h>
 #include <conio.h>
+#include "database_class.h"
 
 // display_intro asks from the user whether he wants to access
 // developer page or just wants to play the game
@@ -76,5 +77,36 @@ bool admin_login(std::string password, int no_of_attempts)
     std::cout<<"Access Denied! Try again";
     getch();
     return false;
+}
+
+void admin_menu()
+{
+    system("cls");
+    CONSOLE_SCREEN_BUFFER_INFO csbi;   //windows.h object
+    int rows,columns,action_choice;                  
+    GetConsoleScreenBufferInfo( GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;              //calculated the no. of rows and columns of the terminal window
+    rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;                 //by using windows.h header file
+    std::string title = "KBC: The Game";
+    std::cout<<std::setw((columns/2)+title.length()/2)<<std::right<<std::setfill('*');  //center aligned the title line
+    std::cout<< title;
+    for(int i=0;i<((columns/2)-title.length()/2);i++)
+    {
+        std::cout<<"*";
+    }
+    std::cout<<"\n\n\n";
+    std::string add = "1. Add a question";
+    std::cout<<std::setw((columns/2)+add.length()/2)<<std::right<<std::setfill(' ');
+    std::cout<<add<<"\n";
+    std::string remove = "2. Remove a question";
+    std::cout<<std::setw((columns/2)+remove.length()/2)<<std::right<<std::setfill(' ');
+    std::cout<<remove<<"\n";
+    std::cout<<std::setw(columns/2)<<std::right<<std::setfill(' ');
+    std::cout<<" ";
+    std::cin>>action_choice;
+    if(action_choice==1)
+    {
+        add_question();
+    }
 }
 #endif
