@@ -49,6 +49,7 @@ bool admin_login(std::string password, int no_of_attempts)
     system("cls");
     CONSOLE_SCREEN_BUFFER_INFO csbi;   //windows.h object
     int rows,columns,compare_result;
+    char password_single;
     std::string input_text;                                              //password entered by user to be checked                  
     GetConsoleScreenBufferInfo( GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
     columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;              //calculated the no. of rows and columns of the terminal window
@@ -68,7 +69,13 @@ bool admin_login(std::string password, int no_of_attempts)
     std::string enter = "Enter Password:";
     std::cout<<std::setw((columns/2)+enter.length()/2)<<std::right<<std::setfill(' ');
     std::cout<<enter;
-    std::cin>>input_text;                                               // takes input the password from user
+    password_single=getch();                                            // takes input the password from user
+    while(password_single != 13)
+    {
+        input_text.push_back(password_single);
+        std::cout<<"*";
+        password_single=getch();
+    }
     compare_result = input_text.compare(password);
     if(compare_result==0)
     {
