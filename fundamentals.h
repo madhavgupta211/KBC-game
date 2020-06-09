@@ -30,11 +30,15 @@ int display_intro()
     std::cout<<"\n\n\n";
     std::string admin = "1. Admin Access";
     std::string game = "2. Play the game ";
+    std::string exit = "3. Exit the Application";
     std::cout<<std::setw((columns/2)+admin.length()/2)<<std::right<<std::setfill(' ');
     std::cout<< admin;
     std::cout<<"\n";
     std::cout<<std::setw((columns/2)+game.length()/2)<<std::right<<std::setfill(' ');
     std::cout<< game;
+    std::cout<<"\n";
+    std::cout<<std::setw((columns/2)+exit.length()/2)<<std::right<<std::setfill(' ');
+    std::cout<< exit;
     std::cout<<"\n";
     std::cout<<std::setw(columns/2)<<std::right<<std::setfill(' ');
     std::cout<<" ";
@@ -123,5 +127,40 @@ int admin_menu()
         remove_question();
     }
     return action_choice;
+}
+
+void display_rules()
+{
+    system("cls");
+    CONSOLE_SCREEN_BUFFER_INFO csbi;   //windows.h object
+    int rows,columns;                  
+    GetConsoleScreenBufferInfo( GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;              //calculated the no. of rows and columns of the terminal window
+    rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;                 //by using windows.h header file
+    std::string title = "KBC: The Game";
+    std::cout<<std::setw((columns/2)+title.length()/2)<<std::right<<std::setfill('*');  //center aligned the title line
+    std::cout<< title;
+    for(int i=0;i<((columns/2)-title.length()/2);i++)
+    {
+        std::cout<<"*";
+    }
+    std::cout<<"\n\n\n";
+    std::cout<<"1. The game contains "<<NO_OF_LEVELS<<" which get progressively difficult.";
+    std::cout<<"\n2. Answering each question correctly grants you more and more prize. there are "<<SAFE_LEVELS<<"safe-questions in the game. They are at:";
+    std::cout<<"\n\t - Q2. Rs. 10,000\n\t - Q7 Rs. 3,20,000";
+    std::cout<<"\n3. Every question has 4 options. To respond to a question, write the option no. (1-4) in the space provided.";
+    std::cout<<"\n4. Till Q2, there is a 30 second timer, after that a 45 second timer till Q7. Then the timer will be removed.";
+    std::cout<<"\n5. If the question is answered incorrectly, the game ends and the prize money corresponds to last safe-question crossed.";
+    std::cout<<"\n6. There are 2 lifelines, 50-50 and change-the-question. To use 50-50, enter f as answer. To use the latter, enter c.";
+    std::cout<<"\n7. If you dont want to attempt a question and want to quit with the prize money you have, enter answer as q";
+    std::cout<<"\nPress enter to begin the game.";
+    return;
+}
+
+int play_game()
+{
+    game_data storage;
+    display_rules();
+    return 0;
 }
 #endif

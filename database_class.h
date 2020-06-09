@@ -2,6 +2,7 @@
 #ifndef _database_class_h
 #define _database_class_h
 #define NO_OF_LEVELS 15
+#define SAFE_LEVELS 2
 #undef max
 
 #include <string>
@@ -23,6 +24,63 @@ struct question{
     int correct_ans;
 };
 
+class game_data{
+    private: 
+        int cash;
+        char fifty_lifeline_status;
+        char changeq_lifeline_status;
+        int lifelines_remaining;
+        int safe_cash;
+    public:
+        game_data()
+        {
+            cash = 0;
+            fifty_lifeline_status = 'y';
+            changeq_lifeline_status = 'y';
+            lifelines_remaining = 2;
+            safe_cash = 0;
+        }
+        void update_cash(int x)
+        {
+            cash = x;
+            return;
+        }
+        int get_lifeline_status()                //returns 0 if no lifeline available, returns 1 if both available, returns 2 if 50-50
+        {                                         //available only, returns 3 if change question available only
+            if(lifelines_remaining == 0)
+            {
+                return 0;
+            }
+            else if(lifelines_remaining == 2)
+            {
+                return 1;
+            }
+            else if(lifelines_remaining == 1 && changeq_lifeline_status == 'y')
+            {
+                return 3;
+            }
+            else
+            {
+                return 2;
+            } 
+        }
+        void update_lifeline_status(std::string x)
+        {
+            if(x.compare("fifty")==0)
+            {
+                fifty_lifeline_status = 'n';
+                lifelines_remaining -= 1;
+            }
+            if(x.compare("change")==0)
+            {
+                changeq_lifeline_status = 'n';
+                lifelines_remaining -= 1;
+            }
+            return;
+        }
+
+};
+
 //Converts any given non string data type into a string
 template <typename T>
 std::string to_string(T val)
@@ -40,7 +98,7 @@ void add_question()
     {
         question q;
         int level;
-        std::cout<<"\n The level of the question(1-15): ";
+        std::cout<<"\n The level of the question(1-"<<NO_OF_LEVELS<<"): ";
         std::cin>>level;
         std::string name = ".\\levels\\level_" + to_string(level) + ".dat";
         std::ofstream foo(name.c_str(),std::ios::out|std::ios::binary|std::ios::app);
@@ -83,7 +141,7 @@ void remove_question()
         int level,present_flag=0,del_element_pos;
         char delete_id[25];
         std::vector<std::string> id_list;
-        std::cout<<"\n The level of the question(1-15): ";
+        std::cout<<"\nThe level of the question(1-"<<NO_OF_LEVELS<<"): ";
         std::cin>>level;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
         std::string name = ".\\levels\\level_" + to_string(level) + ".dat";
