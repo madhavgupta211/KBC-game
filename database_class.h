@@ -1,8 +1,10 @@
 //database_class.h file
 #ifndef _database_class_h
 #define _database_class_h
-#define NO_OF_LEVELS 15
+#define NO_OF_LEVELS 12
 #define SAFE_LEVELS 2
+#define SAFE_LEVEL_1 2
+#define SAFE_LEVEL_2 7
 #undef max
 
 #include <string>
@@ -24,6 +26,31 @@ struct question{
     int correct_ans;
 };
 
+class prize_list{
+    private:
+    int prize_money[NO_OF_LEVELS];
+    public:
+    prize_list()
+    {
+        prize_money[0]=5000;
+        prize_money[1]=10000;
+        prize_money[2]=20000;
+        prize_money[3]=40000;
+        prize_money[4]=80000;
+        prize_money[5]=160000;
+        prize_money[6]=320000;
+        prize_money[7]=640000;
+        prize_money[8]=1250000;
+        prize_money[9]=2500000;
+        prize_money[10]=5000000;
+        prize_money[11]=10000000;
+    }
+    int get_prize_money(int x)
+    {
+        return prize_money[x-1];
+    }
+};
+
 class game_data{
     private: 
         int cash;
@@ -43,6 +70,11 @@ class game_data{
         void update_cash(int x)
         {
             cash = x;
+            return;
+        }
+        void updat_safe_cash(int x)
+        {
+            safe_cash=x;
             return;
         }
         int get_lifeline_status()                //returns 0 if no lifeline available, returns 1 if both available, returns 2 if 50-50
@@ -77,6 +109,14 @@ class game_data{
                 lifelines_remaining -= 1;
             }
             return;
+        }
+        int get_cash()
+        {
+            return cash;
+        }
+        int get_safe_cash()
+        {
+            return safe_cash;
         }
 
 };
