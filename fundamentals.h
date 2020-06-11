@@ -209,15 +209,18 @@ int play_game()
         std::vector<question> question_list;
         int question_no;
         int answer;
+        int count=0;
         while(fin.read((char*) &q,sizeof(question))!=NULL)
         {
             question_list.push_back(q);
         }
         fin.close();
+     //   std::cout<<"\n"<<question_list.size();
         srand(time(0));
-        question_no = (rand() / question_list.size());
+        question_no = (rand() % question_list.size());
+     //   std::cout<<"\n"<<question_no;
         std::cout<<"\nQues: ";
-        std::cout<<question_list[question_no].question;
+        std::cout<<question_list[question_no].ques;
         std::cout<<"\nA. "<<question_list[question_no].option[0];
         std::cout<<std::endl<<"B. "<<question_list[question_no].option[1];
         std::cout<<std::endl<<"C. "<<question_list[question_no].option[2];
@@ -271,7 +274,7 @@ int play_game()
                     std::cout<<"\t\tchange-the-question";
                 }
                 std::cout<<"\nQues: ";
-                std::cout<<question_list[question_no].question;
+                std::cout<<question_list[question_no].ques;
                 int correct = question_list[question_no].correct_ans;
                 int ore[2];
                 if(correct==1)
@@ -361,7 +364,7 @@ int play_game()
                 {
                     question_no++;
                 }
-                std::cout<<question_list[question_no].question;
+                std::cout<<question_list[question_no].ques;
                 std::cout<<"\nA. "<<question_list[question_no].option[0];
                 std::cout<<std::endl<<"B. "<<question_list[question_no].option[1];
                 std::cout<<std::endl<<"C. "<<question_list[question_no].option[2];
@@ -394,7 +397,7 @@ int play_game()
             storage.update_cash(new_amount);
             if(i==SAFE_LEVEL_1||i==SAFE_LEVEL_2)
             {
-                storage.update_cash(new_amount);
+                storage.update_safe_cash(new_amount);
             }
             std::cout<<"\nCongratulations!! Correct answer. You win Rs."<<new_amount<<" !!";
             if(i!=NO_OF_LEVELS)

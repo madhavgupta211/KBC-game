@@ -35,7 +35,6 @@ int main()
             {
             admin_menu_action = admin_menu();
             }
-            access_type = display_intro();
         }
         else if(access_type == 2)
         {

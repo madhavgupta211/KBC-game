@@ -20,7 +20,7 @@
 //questions of which one would be randomly selected in-game
 
 struct question{
-    char question[300];
+    char ques[300];
     char option[4][100];
     char id[25];
     int correct_ans;
@@ -72,7 +72,7 @@ class game_data{
             cash = x;
             return;
         }
-        void updat_safe_cash(int x)
+        void update_safe_cash(int x)
         {
             safe_cash=x;
             return;
@@ -147,26 +147,32 @@ void add_question()
             std::cout<<"\nFile could not open.!!";
             return;
         }
-        std::cout<<"\n Enter the question: ";
-        std::cin>>q.question;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        std::cout<<"\n Enter the question: ";
+        std::cin.getline(q.ques, 300);
+     //   std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+     //   std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
         for(int i=0;i<4;i++)
         {
             std::cout<<"\n Enter the "<<i+1<<" option: ";
-            std::cin>>q.option[i];
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+            std::cin.getline(q.option[i],100);
+     //       std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+     //       std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
         }
         std::cout<<"\n Enter the correct option no.(1-4): ";
         std::cin>>q.correct_ans;
+   //     std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
         std::cout<<"\n Enter the ID for the question(one word preferable): ";
-        std::cin>>q.id;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        std::cin.getline(q.id,25);
+   //     std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+   //     std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
         foo.write((char*) &q,sizeof(question));
         std::cout<<"\n Question added!";
         std::cout<<"\n Want to add more ? (y/n): ";
         std::cin>>continue_choice;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+   //     std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
         foo.close();
     }
     return;
