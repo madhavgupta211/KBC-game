@@ -11,14 +11,13 @@
 #include <time.h>
 #include "database_class.h"
 
-// display_intro asks from the user whether he wants to access
-// developer page or just wants to play the game
-// returns 1 if admin page is chosen, 2 otherwise  
-int display_intro()
+// title_display() displays the title of the game 
+// center aligned according to window size
+// obsolete function, no longer needed, replaced by more universally applicable center_print()
+int title_display()
 {
-    system("cls");
     CONSOLE_SCREEN_BUFFER_INFO csbi;   //windows.h object
-    int rows,columns,access_value;                  
+    int rows,columns;                  
     GetConsoleScreenBufferInfo( GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
     columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;              //calculated the no. of rows and columns of the terminal window
     rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;                 //by using windows.h header file
@@ -28,22 +27,51 @@ int display_intro()
     for(int i=0;i<((columns/2)-title.length()/2);i++)
     {
         std::cout<<"*";
+    } 
+    return columns;
+} 
+
+// center_print() takes input a string variable and prints it to stdout centrally aligned.
+// it takes another argument, the fill character. Default value is set to whitespace
+// it does not return anything
+void center_print(std::string x,char y = ' ',bool newline = true)
+{
+    CONSOLE_SCREEN_BUFFER_INFO csbi;   //windows.h object
+    int rows,columns;                  
+    GetConsoleScreenBufferInfo( GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;              //calculated the no. of rows and columns of the terminal window
+    rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;                 //by using windows.h header file
+    std::cout<<std::setw((columns/2)+x.length()/2)<<std::right<<std::setfill(y);
+    std::cout<<x;
+    if(newline)
+    {
+        for(int i=0;i<((columns/2)-x.length()/2);i++)
+        {
+        std::cout<<y;
+        }
+        std::cout<<"\n";
     }
-    std::cout<<"\n\n\n";
+    return;
+}
+
+// display_intro asks from the user whether he wants to access
+// developer page or just wants to play the game
+// returns 1 if admin page is chosen, 2 otherwise  
+int display_intro()
+{
+    system("cls");
+    int access_value;
+    std::string title = TITLE ;
+    center_print(title,'*');
+    std::cout<<"\n\n";
     std::string admin = "1. Admin Access";
     std::string game = "2. Play the game ";
     std::string exit = "3. Exit the Application";
-    std::cout<<std::setw((columns/2)+admin.length()/2)<<std::right<<std::setfill(' ');
-    std::cout<< admin;
-    std::cout<<"\n";
-    std::cout<<std::setw((columns/2)+game.length()/2)<<std::right<<std::setfill(' ');
-    std::cout<< game;
-    std::cout<<"\n";
-    std::cout<<std::setw((columns/2)+exit.length()/2)<<std::right<<std::setfill(' ');
-    std::cout<< exit;
-    std::cout<<"\n";
-    std::cout<<std::setw(columns/2)<<std::right<<std::setfill(' ');
-    std::cout<<" ";
+    std::string space = " ";
+    center_print(admin);
+    center_print(game);
+    center_print(exit);
+    center_print(space,' ',false);
     std::cin>>access_value;
     return access_value;
 }
@@ -53,28 +81,16 @@ int display_intro()
 bool admin_login(std::string password, int no_of_attempts)
 {
     system("cls");
-    CONSOLE_SCREEN_BUFFER_INFO csbi;   //windows.h object
-    int rows,columns,compare_result;
+    int compare_result;
+    std::string title = TITLE ;
+    center_print(title,'*');
     char password_single;
     std::string input_text;                                              //password entered by user to be checked                  
-    GetConsoleScreenBufferInfo( GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-    columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;              //calculated the no. of rows and columns of the terminal window
-    rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;                 //by using windows.h header file
-    std::string title = "KBC: The Game";
-    std::cout<<std::setw((columns/2)+title.length()/2)<<std::right<<std::setfill('*');  //center aligned the title line
-    std::cout<< title;
-    for(int i=0;i<((columns/2)-title.length()/2);i++)
-    {
-        std::cout<<"*";
-    }
     std::cout<<"\n\n\n";
-    std::string number = "No. of attempts remaining :";
-    std::cout<<std::setw((columns/2)+number.length()/2)<<std::right<<std::setfill(' ');
-    std::cout<<number<<" "<<no_of_attempts;
-    std::cout<<"\n";
+    std::string number = "No. of attempts remaining : " + to_string(no_of_attempts);
+    center_print(number);
     std::string enter = "Enter Password:";
-    std::cout<<std::setw((columns/2)+enter.length()/2)<<std::right<<std::setfill(' ');
-    std::cout<<enter;
+    center_print(enter,' ',false);
     password_single=getch();                                            // takes input the password from user
     while(password_single != 13)
     {
@@ -95,30 +111,18 @@ bool admin_login(std::string password, int no_of_attempts)
 int admin_menu()
 {
     system("cls");
-    CONSOLE_SCREEN_BUFFER_INFO csbi;   //windows.h object
-    int rows,columns,action_choice;                  
-    GetConsoleScreenBufferInfo( GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-    columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;              //calculated the no. of rows and columns of the terminal window
-    rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;                 //by using windows.h header file
-    std::string title = "KBC: The Game";
-    std::cout<<std::setw((columns/2)+title.length()/2)<<std::right<<std::setfill('*');  //center aligned the title line
-    std::cout<< title;
-    for(int i=0;i<((columns/2)-title.length()/2);i++)
-    {
-        std::cout<<"*";
-    }
-    std::cout<<"\n\n\n";
+    int action_choice;
+    std::string title = TITLE ;
+    center_print(title,'*');
+    std::cout<<"\n\n";
     std::string add = "1. Add a question";
-    std::cout<<std::setw((columns/2)+add.length()/2)<<std::right<<std::setfill(' ');
-    std::cout<<add<<"\n";
+    center_print(add);
     std::string remove = "2. Remove a question";
-    std::cout<<std::setw((columns/2)+remove.length()/2)<<std::right<<std::setfill(' ');
-    std::cout<<remove<<"\n";
+    center_print(remove);
     std::string exit = "3. Exit admin mode";
-    std::cout<<std::setw((columns/2)+exit.length()/2)<<std::right<<std::setfill(' ');
-    std::cout<<exit<<"\n";
-    std::cout<<std::setw(columns/2)<<std::right<<std::setfill(' ');
-    std::cout<<" ";
+    center_print(exit);
+    std::string space = " ";
+    center_print(space,' ',false);
     std::cin>>action_choice;
     if(action_choice==1)
     {
@@ -134,21 +138,11 @@ int admin_menu()
 void display_rules()
 {
     system("cls");
-    CONSOLE_SCREEN_BUFFER_INFO csbi;   //windows.h object
-    int rows,columns;                  
-    GetConsoleScreenBufferInfo( GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-    columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;              //calculated the no. of rows and columns of the terminal window
-    rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;                 //by using windows.h header file
-    std::string title = "KBC: The Game";
-    std::cout<<std::setw((columns/2)+title.length()/2)<<std::right<<std::setfill('*');  //center aligned the title line
-    std::cout<< title;
-    for(int i=0;i<((columns/2)-title.length()/2);i++)
-    {
-        std::cout<<"*";
-    }
-    std::cout<<"\n\n\n";
-    std::cout<<"1. The game contains "<<NO_OF_LEVELS<<" which get progressively difficult.";
-    std::cout<<"\n2. Answering each question correctly grants you more and more prize. there are "<<SAFE_LEVELS<<"safe-questions in the game. They are at:";
+    std::string title = TITLE ;
+    center_print(title,'*');
+    std::cout<<"\n\n";
+    std::cout<<"1. The game contains "<<NO_OF_LEVELS<<" questions which get progressively difficult.";
+    std::cout<<"\n2. Answering each question correctly grants you more and more prize. there are "<<SAFE_LEVELS<<"    fe-questions in the game. They are at:";
     std::cout<<"\n\t - Q2. Rs. 10,000\n\t - Q7 Rs. 3,20,000";
     std::cout<<"\n3. Every question has 4 options. To respond to a question, write the option no. (1-4) in the space provided.";
     std::cout<<"\n4. Till Q2, there is a 30 second timer, after that a 45 second timer till Q7. Then the timer will be removed.";
@@ -169,34 +163,26 @@ int play_game()
     {
         system("cls");
         question q;
-        CONSOLE_SCREEN_BUFFER_INFO csbi;   //windows.h object
-        int rows,columns,life_checker;                  
-        GetConsoleScreenBufferInfo( GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-        columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;              //calculated the no. of rows and columns of the terminal window
-        rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;                 //by using windows.h header file
-        std::string title = "KBC: The Game";
-        std::cout<<std::setw((columns/2)+title.length()/2)<<std::right<<std::setfill('*');  //center aligned the title line
-        std::cout<< title;
-        for(int j=0;j<((columns/2)-title.length()/2);j++)
-        {
-            std::cout<<"*";
-        }
-        std::cout<<"\n\n\n";
+        int life_checker;
+        std::string title = TITLE ;
+        center_print(title,'*');
+        std::cout<<"\n\n";
         std::cout<<"Q."<<i;
-        std::cout<<"\nPrize earned if you quit: "<<storage.get_cash()<<"\tPrize earned if you lose: "<<storage.get_safe_cash();
+        std::cout<<"\nPrize earned if you quit: "<<storage.get_cash()<<"\t\tPrize earned if you answer incorrectly: "<<storage.get_safe_cash();
+        std::cout<<"\nPrize earned if you answer correctly: "<<list.get_prize_money(i);
         std::cout<<"\nLifelines Remaining:";
         life_checker = storage.get_lifeline_status();
         if(life_checker == 1)
         {
-            std::cout<<"\t\t50-50\t\tchange-the-question";
+            std::cout<<"\t\t\t50-50 (5)\t\t\tchange-the-question (6)";
         }
         if(life_checker == 2)
         {
-            std::cout<<"\t\t50-50";
+            std::cout<<"\t\t\t50-50 (5)";
         }
         if(life_checker == 3)
         {
-            std::cout<<"\t\tchange-the-question";
+            std::cout<<"\t\t\tchange-the-question (6)";
         }
         std::string name = ".\\levels\\level_" + to_string(i) + ".dat";
         std::ifstream fin(name.c_str(),std::ios::in|std::ios::binary);
@@ -215,10 +201,8 @@ int play_game()
             question_list.push_back(q);
         }
         fin.close();
-     //   std::cout<<"\n"<<question_list.size();
         srand(time(0));
         question_no = (rand() % question_list.size());
-     //   std::cout<<"\n"<<question_no;
         std::cout<<"\nQues: ";
         std::cout<<question_list[question_no].ques;
         std::cout<<"\nA. "<<question_list[question_no].option[0];
@@ -249,14 +233,9 @@ int play_game()
                 }
                 storage.update_lifeline_status(res);
                 system("cls");
-                std::string title = "KBC: The Game";
-                std::cout<<std::setw((columns/2)+title.length()/2)<<std::right<<std::setfill('*');  //center aligned the title line
-                std::cout<< title;
-                for(int j=0;j<((columns/2)-title.length()/2);j++)
-                {
-                    std::cout<<"*";
-                }
-                std::cout<<"\n\n\n";
+                std::string title = TITLE ;
+                center_print(title,'*');
+                std::cout<<"\n\n";
                 std::cout<<"Q."<<i;
                 std::cout<<"\nPrize earned if you quit: "<<storage.get_cash()<<"\tPrize earned if you lose: "<<storage.get_safe_cash();
                 std::cout<<"\nLifelines Remaining:";
@@ -321,7 +300,7 @@ int play_game()
                 int status_checker;
                 std::string res= "change";
                 status_checker = storage.get_lifeline_status();
-                if(status_checker == 0 | status_checker == 3)
+                if(status_checker == 0 | status_checker == 2)
                 {
                     std::cout<<"\nYou have already used the lifeline!";
                     std::cout<<"\nEnter Answer: ";
@@ -331,13 +310,8 @@ int play_game()
                 }
                 storage.update_lifeline_status(res);
                 system("cls");
-                std::string title = "KBC: The Game";
-                std::cout<<std::setw((columns/2)+title.length()/2)<<std::right<<std::setfill('*');  //center aligned the title line
-                std::cout<< title;
-                for(int j=0;j<((columns/2)-title.length()/2);j++)
-                {
-                    std::cout<<"*";
-                }
+                std::string title = TITLE ;
+                center_print(title,'*');
                 std::cout<<"\n\n\n";
                 std::cout<<"Q."<<i;
                 std::cout<<"\nPrize earned if you quit: "<<storage.get_cash()<<"\tPrize earned if you lose: "<<storage.get_safe_cash();
