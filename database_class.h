@@ -7,6 +7,8 @@
 #define SAFE_LEVEL_2 7         //second safe level
 //to add more than two safe levels you have to change the if condition in line 398 of fundamentals.h and also the display_rules() func.
 #define TITLE "KBC: The Game"
+#define TIMER_1 34
+#define TIMER_2 50
 #undef max
 
 #include <string>

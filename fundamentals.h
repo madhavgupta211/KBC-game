@@ -163,8 +163,21 @@ int play_game()
     {
         system("cls");
         question q;
-        int life_checker;
+        int life_checker,timer_time;
+        int left_time = 100000;
+        int time_elapsed;
+        bool apply_timer = false;
         std::string title = TITLE ;
+        if(i<=SAFE_LEVEL_1)
+        {
+            timer_time = TIMER_1;
+            apply_timer = true;
+        }
+        else if(i<=SAFE_LEVEL_2)
+        {
+            timer_time = TIMER_2;
+            apply_timer = true;
+        }
         center_print(title,'*');
         std::cout<<"\n\n";
         std::cout<<"Q."<<i;
@@ -210,11 +223,62 @@ int play_game()
         std::cout<<std::endl<<"C. "<<question_list[question_no].option[2];
         std::cout<<std::endl<<"D. "<<question_list[question_no].option[3];
         std::cout<<"\n\nEnter Answer: ";
-        std::cin>>answer;
+        if(apply_timer)
+        {
+            answer = 8;
+            clock_t start;
+            int flag =0;
+            start = clock();
+            while(1)
+            {
+                time_elapsed = (int)((clock() - start)/(double) CLOCKS_PER_SEC);
+                left_time = std::min(timer_time - time_elapsed,left_time);
+                if(left_time == 45)
+                {
+                    std::cout<<"\n45 seconds remaining";
+                    left_time--;
+                }
+                if(left_time == 30)
+                {
+                    std::cout<<"\n30 seconds remaining";
+                    left_time--;
+                }
+                if(left_time == 20)
+                {
+                    std::cout<<"\n20 seconds remaining";
+                    left_time--;
+                }
+                if(left_time == 10)
+                {
+                    std::cout<<"\n10 seconds remaining";
+                    left_time--;
+                }
+                if(left_time == 5)
+                {
+                    std::cout<<"\n5 seconds remaining";
+                    left_time--;
+                }
+                if(kbhit())
+                {
+                    flag=1;
+                    break;
+                }
+                if(time_elapsed>=timer_time)
+                    break;
+            }
+            if(flag==1)
+            {
+                std::cin>>answer;
+            }
+        }
+        else
+        {
+            std::cin>>answer;
+        }
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
         while(1)
         {
-            if(answer>=1 && answer<=4)
+            if((answer>=1 && answer<=4)||answer==8)
             {
                 break;
             }
@@ -344,7 +408,58 @@ int play_game()
                 std::cout<<std::endl<<"C. "<<question_list[question_no].option[2];
                 std::cout<<std::endl<<"D. "<<question_list[question_no].option[3];
                 std::cout<<"\n\nEnter Answer: ";
-                std::cin>>answer;
+                if(apply_timer)
+                {
+                    answer = 8;
+                    clock_t start;
+                    int flag =0;
+                    start = clock();
+                    while(1)
+                    {
+                        time_elapsed = (int)((clock() - start)/(double) CLOCKS_PER_SEC);
+                        left_time = std::min(timer_time - time_elapsed , left_time);
+                        if(left_time == 45)
+                        {
+                            std::cout<<"\n45 seconds remaining";
+                            left_time--;
+                        }
+                        if(left_time == 30)
+                        {
+                            std::cout<<"\n30 seconds remaining";
+                            left_time--;
+                        }
+                        if(left_time == 20)
+                        {
+                            std::cout<<"\n20 seconds remaining";
+                            left_time--;
+                        }
+                        if(left_time == 10)
+                        {
+                            std::cout<<"\n10 seconds remaining";
+                            left_time--;
+                        }
+                        if(left_time == 5)
+                        {
+                            std::cout<<"\n5 seconds remaining";
+                            left_time--;
+                        }
+                        if(kbhit())
+                        {
+                            flag=1;
+                            break;
+                        }
+                        if(time_elapsed>=timer_time)
+                            break;
+                    }
+                    if(flag==1)
+                    {
+                        std::cin>>answer;
+                    }
+                }
+                else
+                {
+                    std::cin>>answer;
+                }
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
             }
             if(answer==7)
@@ -359,7 +474,58 @@ int play_game()
                 else
                 {
                     std::cout<<"\n\nEnter Answer: ";
-                    std::cin>>answer;
+                    if(apply_timer)
+                    {
+                        answer = 8;
+                        clock_t start;
+                        int flag =0;
+                        start = clock();
+                        while(1)
+                        {
+                            left_time = std::min(timer_time - time_elapsed,left_time);
+                            time_elapsed = (int)((clock() - start)/(double) CLOCKS_PER_SEC);
+                            if(left_time == 45)
+                            {
+                                std::cout<<"\n45 seconds remaining";
+                                left_time--;
+                            }
+                            if(left_time == 30)
+                            {
+                                std::cout<<"\n30 seconds remaining";
+                                left_time--;
+                            }
+                            if(left_time == 20)
+                            {
+                                std::cout<<"\n20 seconds remaining";
+                                left_time--;
+                            }
+                            if(left_time == 10)
+                            {
+                                std::cout<<"\n10 seconds remaining";
+                                left_time--;
+                            }
+                            if(left_time == 5)
+                            {
+                                std::cout<<"\n5 seconds remaining";
+                                left_time--;
+                            }
+                            if(kbhit())
+                            {
+                                flag=1;
+                                break;
+                            }
+                            if(time_elapsed>=left_time)
+                                break;
+                        }
+                        if(flag==1)
+                        {
+                            std::cin>>answer;
+                        }
+                    }
+                    else
+                    {
+                        std::cin>>answer;
+                    }
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
                 }   
             }
@@ -385,6 +551,12 @@ int play_game()
                 return storage.get_cash();
             }
             
+        }
+        else if(answer == 8)
+        {
+            std::cout<<"\nYou failed to answer within the time limit. Game over.";
+            std::cout<<"\nYou have dropped back to Rs."<<storage.get_safe_cash()<<".";
+            return storage.get_safe_cash();
         }
         else
         {
