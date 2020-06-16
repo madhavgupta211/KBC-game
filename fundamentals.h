@@ -54,6 +54,7 @@ void center_print(std::string x,char y = ' ',bool newline = true)
     return;
 }
 
+
 // display_intro asks from the user whether he wants to access
 // developer page or just wants to play the game
 // returns 1 if admin page is chosen, 2 otherwise  
@@ -142,7 +143,7 @@ void display_rules()
     center_print(title,'*');
     std::cout<<"\n\n";
     std::cout<<"1. The game contains "<<NO_OF_LEVELS<<" questions which get progressively difficult.";
-    std::cout<<"\n2. Answering each question correctly grants you more and more prize. there are "<<SAFE_LEVELS<<"    fe-questions in the game. They are at:";
+    std::cout<<"\n2. Answering each question correctly grants you more and more prize. there are "<<SAFE_LEVELS<<" safe-questions in the game. They are at:";
     std::cout<<"\n\t - Q2. Rs. 10,000\n\t - Q7 Rs. 3,20,000";
     std::cout<<"\n3. Every question has 4 options. To respond to a question, write the option no. (1-4) in the space provided.";
     std::cout<<"\n4. Till Q2, there is a 30 second timer, after that a 45 second timer till Q7. Then the timer will be removed.";
@@ -225,7 +226,7 @@ int play_game()
         std::cout<<"\n\nEnter Answer: ";
         if(apply_timer)
         {
-            answer = 8;
+            answer = 8;       // answer = timer_input(timer_time, 8,left_time);
             clock_t start;
             int flag =0;
             start = clock();
